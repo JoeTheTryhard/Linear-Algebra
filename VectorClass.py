@@ -60,3 +60,18 @@ class Vector():
     def display(self):
         for entry in self.entries:
             print("|" + str(entry) + "|", end="\n")
+    
+    def dot(self, other):
+        try:
+            if self.lenght == other.lenght:
+                tmp = []
+                for i in range(1, self.lenght+1):
+                    tmp.append(self.index(i) + other.index(i))
+                return Vector(tmp)
+            else:
+                raise ValueError
+
+        except(ValueError):
+            self.error("Vectors have different lenghts ({} != {})".format(self.lenght, other.lenght))
+
+
