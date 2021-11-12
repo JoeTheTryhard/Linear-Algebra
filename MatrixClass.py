@@ -58,12 +58,12 @@ class Matrix(): # This class uses the vector class in order to do certain operat
         
         if type(other) is Vector:
             try:
-                if self.rows == other.lenght: #Check if the number of rows in the matrix is equal to the lenght of the Vector, this is a prerequesite for matrix-vector multiplication
+                if self.columns == other.lenght: #Check if the number of rows in the matrix is equal to the lenght of the Vector, this is a prerequesite for matrix-vector multiplication
                     tmp = []
                     for nmb_of_zeros in range(1, self.rows+1):
                         tmp.append(0)
                     sumVect = Vector(tmp)
-                    for i in range(1, self.rows+1):
+                    for i in range(1, self.columns+1):
                         sumVect += Vector(self.column(i)) * other.index(i)
                     return sumVect
                 else: 
@@ -75,13 +75,10 @@ class Matrix(): # This class uses the vector class in order to do certain operat
             try:
                 if self.columns == other.rows:
                     liste = []
-                    for i in range(1, other.columns+1):
-                        print(other.column(i))
-                        partVect = self * Vector(other.column(i))
-                        partVect.display()
-                        liste.append(partVect.entries)
-                    print(liste)
-                    return Matrix(liste)
+                    for i in range(1, (other.columns+1)):
+                        MpartVect = self * Vector(other.column(i))
+                        liste.append(MpartVect.entries)
+                    return Matrix(liste).transpose()
                 else: raise ValueError
             except (ValueError): 
                 self.error("Matrix of different row-column number (Matrix1 size: {} and Matrix 2 size: {}".format(self.rowXcol, other.rowXcol))
@@ -137,16 +134,26 @@ class Matrix(): # This class uses the vector class in order to do certain operat
             row = self.entries[integer-1]
             return row
         except(IndexError):
-            self.error("This Matrix has no corresponding row #{}".format(integer))
+            self.error("{} Matrix has no corresponding row #{}".format(self.entries,integer))
 
     def column(self, integer):
         try:
             column = []
-            for i in range(1, self.columns+1):
+            for i in range(1, self.rows+1):
                 column.append(self.entries[i-1][integer-1])
             return column
         except(IndexError):
-            self.error("This Matrix has no corresponding column #{}".format(integer))
+            self.error("{} Matrix has no corresponding column #{}".format(self.entries,integer))
+    def transpose(self):
+        j = len(self.entries)
+        i = len(self.entries[0])
+        new_matrix = []
+        for I in range(i):
+            tmp = []
+            for J in range(j):
+                tmp.append(self.entries[J][I])
+            new_matrix.append(tmp)
+        return Matrix(new_matrix)
 
 
 
